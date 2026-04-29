@@ -257,8 +257,12 @@
                 <span><strong>音楽の共有手順</strong>をおさらい</span>
                 <small>※BGMを使用する場合のみ対応</small>
                 <span class="step-text">
-                    <strong>各Zoomレッスンへ入室 → 共有 → 詳細 → コンピューターオーディオ → 共有</strong><br>
-                    <small>※自分の名前の横に<strong>青いスピーカーマーク</strong>が出ればOK！</small>
+                    <strong>1. 各Zoomレッスンへ入室</strong><br>
+                    <strong>2. 共有 をクリック</strong><br>
+                    <strong>3. 詳細 をクリック</strong><small>（上部に3つのタブあり）</small><br>
+                    <strong>4. コンピューターオーディオ をクリック</strong><br>
+                    <strong>5. 共有 をクリック</strong><br>
+                    <small style="margin-top: 8px; display: block;">※自分の名前の横に<strong>青いスピーカーマーク</strong>が出ればOK！</small>
                 </span>
             </div>
         </div>
@@ -333,7 +337,7 @@
     // Initialize Lucide Icons
     lucide.createIcons();
 
-    // Table Filtering Logic
+    // Table Filtering Logic - Enhanced to search all columns
     function filterTable() {
         const input = document.getElementById("searchInput");
         const filter = input.value.toLowerCase();
@@ -341,15 +345,19 @@
         const tr = table.getElementsByTagName("tr");
 
         for (let i = 1; i < tr.length; i++) {
-            let td = tr[i].getElementsByTagName("td")[0];
-            if (td) {
-                let txtValue = td.textContent || td.innerText;
+            const tds = tr[i].getElementsByTagName("td");
+            let found = false;
+            
+            // Search across all columns
+            for (let j = 0; j < tds.length; j++) {
+                let txtValue = tds[j].textContent || tds[j].innerText;
                 if (txtValue.toLowerCase().indexOf(filter) > -1) {
-                    tr[i].style.display = "";
-                } else {
-                    tr[i].style.display = "none";
+                    found = true;
+                    break;
                 }
             }
+            
+            tr[i].style.display = found ? "" : "none";
         }
     }
 </script>
