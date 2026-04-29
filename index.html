@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BGM確認ページ｜出勤準備</title>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --primary: #f57c00; /* オレンジ */
+            --primary-light: #fff3e0; /* 薄いオレンジ */
+            --primary-dark: #e65100;
+            --bg: #fffbf8; /* 暖色系の白 */
+            --text: #3e2723; /* 濃いブラウン */
+            --text-light: #795548; /* ブラウン系グレー */
+            --white: #ffffff;
+            --border: #ffe0b2;
+            --accent: #ff9800;
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        header {
+            background: var(--primary);
+            color: var(--white);
+            padding: 16px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(245, 124, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(245, 124, 0, 0.05);
+            border: 1px solid var(--border);
+        }
+
+        h2 {
+            font-size: 1.1rem;
+            margin: 0 0 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary-dark);
+        }
+
+        .check-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+            background: var(--primary-light);
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            border: 1px dashed var(--accent);
+        }
+
+        .check-item i {
+            color: var(--primary);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .step-text {
+            display: block;
+            margin-top: 4px;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            line-height: 1.4;
+        }
+
+        .link-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .link-button {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            text-decoration: none;
+            color: var(--text);
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .link-button:active {
+            background: var(--primary-light);
+            border-color: var(--accent);
+        }
+
+        .link-button i {
+            color: var(--accent);
+        }
+
+        .search-container {
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 12px 12px 12px 40px;
+            border-radius: 10px;
+            border: 2px solid var(--border);
+            box-sizing: border-box;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+            background: var(--white);
+        }
+
+        #searchInput:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--accent);
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 0 -4px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            min-width: 400px;
+        }
+
+        th, td {
+            padding: 14px 10px;
+            border-bottom: 1px solid var(--border);
+            text-align: left;
+        }
+
+        th {
+            background: var(--primary-light);
+            font-weight: 600;
+            color: var(--primary-dark);
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.05em;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background-color: #fffaf0;
+        }
+
+        .volume-badge {
+            background: var(--primary);
+            color: var(--white);
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-family: monospace;
+            display: inline-block;
+        }
+
+        .note {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 16px;
+            font-size: 0.8rem;
+            color: var(--text-light);
+            border-top: 1px solid var(--border);
+            margin-top: 20px;
+        }
+
+        @media (max-width: 480px) {
+            header h1 { font-size: 1.1rem; }
+            .card { padding: 18px; }
+            td, th { padding: 12px 8px; }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <i data-lucide="music-4"></i>
+    <h1>BGM確認ページ</h1>
+</header>
+
+<main>
+
+    <!-- 1段目: 基本チェック -->
+    <section class="card">
+        <h2><i data-lucide="check-square"></i>基本チェック</h2>
+        <div class="check-item">
+            <i data-lucide="clock-3"></i>
+            <span>BGMを開き、<strong>0:00で一時停止</strong>しているか確認してください。</span>
+        </div>
+        <div class="check-item">
+            <i data-lucide="layers"></i>
+            <span>トラック指定のあるBGMは、<strong>事前に作成済み</strong>ですか？</span>
+        </div>
+        <div class="check-item">
+            <i data-lucide="video"></i>
+            <div>
+                <span><strong>音楽の共有手順</strong>をおさらい</span>
+                <small>※BGMを使用する場合のみ対応</small>
+                <span class="step-text">
+                    <strong>各Zoomレッスンへ入室 → 共有 → 詳細 → コンピューターオーディオ → 共有</strong><br>
+                    <small>※自分の名前の横に<strong>青いスピーカーマーク</strong>が出ればOK！</small>
+                </span>
+            </div>
+        </div>
+        <p class="note"><i data-lucide="help-circle"></i> レッスンごとに設定が異なります。必ず以下の一覧を確認してください。</p>
+    </section>
+
+    <!-- 2段目: 音量一覧 -->
+    <section class="card">
+        <h2><i data-lucide="activity"></i>レッスン別 音量一覧</h2>
+        
+        <div class="search-container">
+            <i data-lucide="search" class="search-icon"></i>
+            <input type="text" id="searchInput" placeholder="レッスン名で検索..." onkeyup="filterTable()">
+        </div>
+
+        <div class="table-container">
+            <table id="bgmTable">
+                <thead>
+                    <tr>
+                        <th>レッスン名</th>
+                        <th style="width: 70px;">音量</th>
+                        <th>備考・操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>ヨガベーシック</td><td><span class="volume-badge">15</span></td><td>流し切り</td></tr>
+                    <tr><td>ネイチャーフィールヨガ</td><td><span class="volume-badge">25</span></td><td>森→海→インド</td></tr>
+                    <tr><td>エナジーヨガ</td><td><span class="volume-badge">30</span></td><td>トラック作成必要</td></tr>
+                    <tr><td>美律</td><td><span class="volume-badge">20</span></td><td>流し切り</td></tr>
+                    <tr><td>PW初級</td><td><span class="volume-badge">20</span></td><td>流し切り</td></tr>
+                    <tr><td>PW中級</td><td><span class="volume-badge">8</span></td><td>Ethnic Flow</td></tr>
+                    <tr><td>PW上級</td><td><span class="volume-badge">30</span></td><td>瞑想～途中まで</td></tr>
+                    <tr><td>ヨガフローベーシック</td><td><span class="volume-badge">25</span></td><td>スタート時</td></tr>
+                    <tr><td>ヨガフローアドバンス</td><td><span class="volume-badge">30</span></td><td>スタート時</td></tr>
+                    <tr><td>ヨガフローリラックス</td><td><span class="volume-badge">10</span></td><td>開始～13分</td></tr>
+                    <tr><td>サウンドフローアクティブ</td><td><span class="volume-badge">25</span></td><td>M1～M2</td></tr>
+                    <tr><td>サウンドフローエモーション</td><td><span class="volume-badge">20</span></td><td>オープニング～</td></tr>
+                    <tr><td>ジョイフルヨガ</td><td><span class="volume-badge">20</span></td><td>クールダウン～</td></tr>
+                    <tr><td>至福の睡眠ヨガ</td><td><span class="volume-badge">20</span></td><td>専用音源</td></tr>
+                    <tr><td>ハーモニックブリージングヨガ</td><td><span class="volume-badge">35</span></td><td>トラック作成必要</td></tr>
+                    <tr><td>ミュージックヨガバーニング</td><td><span class="volume-badge">35</span></td><td>終始一定</td></tr>
+                    <tr><td>Fun Shape Beauty</td><td><span class="volume-badge">20</span></td><td>M1～M14</td></tr>
+                    <tr><td>Fun Shape Perfect</td><td><span class="volume-badge">15</span></td><td>開始～13分</td></tr>
+                    <tr><td>Asian Music Yoga</td><td><span class="volume-badge">25</span></td><td>M7まで</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- 3段目: 手順マニュアル -->
+    <section class="card">
+        <h2><i data-lucide="book-open"></i>手順マニュアル</h2>
+        <div class="link-group">
+            <a href="https://docs.google.com/document/d/1CzQoRlngfYmWTlO4GpV8LLCaCAcmx2SDPym1VcketT0/edit#heading=h.qpdtoi4it8g0" class="link-button" target="_blank">
+                <span><i data-lucide="file-text" style="display:inline; vertical-align:middle; margin-right:8px; color: var(--primary);"></i>流し方・音量ルール</span>
+                <i data-lucide="chevron-right"></i>
+            </a>
+            <a href="https://docs.google.com/document/d/1CzQoRlngfYmWTlO4GpV8LLCaCAcmx2SDPym1VcketT0/edit#heading=h.1kpgmk441dj8" class="link-button" target="_blank">
+                <span><i data-lucide="wrench" style="display:inline; vertical-align:middle; margin-right:8px; color: var(--primary);"></i>トラックの作り方 (Player)</span>
+                <i data-lucide="chevron-right"></i>
+            </a>
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    <p>&copy; 2024 LAVA Staff Support<br>BGMは必ず最新ルールを確認してください</p>
+</footer>
+
+<script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // Table Filtering Logic
+    function filterTable() {
+        const input = document.getElementById("searchInput");
+        const filter = input.value.toLowerCase();
+        const table = document.getElementById("bgmTable");
+        const tr = table.getElementsByTagName("tr");
+
+        for (let i = 1; i < tr.length; i++) {
+            let td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                let txtValue = td.textContent || td.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
